@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pie Chart Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: rgb(2, 0, 36);
+      background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(41, 41, 137, 1) 100%, rgba(0, 212, 255, 1) 100%);
+    }
+
+
+    .highlight-text {
+      color: #007bff;
+      /* Blue color */
+    }
+
+    h2 {
+      color: #00eaff;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      background-color: transparent;
+    }
+
+    input {
+      background-color: transparent;
+    }
+
+    .border-rounded {
+      border-radius: 10px;
+    }
+
+    .form-control {
+      background-color: transparent;
+      color: #007bff;
+    }
+
+    .form-control:active,
+    .form-control:focus {
+      box-shadow: none;
+      background-color: transparent;
+      color: #007bff;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div class="container">
+    <h1 class="text-center text-primary mt-5 mb-5">Generate Pie Chart</h1>
+    <form id="myForm" class="myForm" onsubmit="createPieChart(event)">
+      <h2 class="mb-5 ">Enter Data for Pie Chart</h2>
+      <div id="inputFields">
+        <div class="row border-rounded border border-primary p-3 mb-3">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="label" class="highlight-text">Label:</label>
+              <input type="text" name="label[]" class="form-control label-name" placeholder="Label Name" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="data" class="highlight-text">Value:</label>
+              <input type="number" name="data[]" class="form-control data" placeholder="Data Value" step="0.01" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="color" class="highlight-text">Color:</label>
+              <input type="color" name="color[]" class="form-control color" required>
+            </div>
+          </div>
+        </div>
+        <div class="row border-rounded border border-primary p-3 mb-3">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="label" class="highlight-text">Label:</label>
+              <input type="text" name="label[]" class="form-control label-name" placeholder="Label Name" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="data" class="highlight-text">Value:</label>
+              <input type="number" name="data[]" class="form-control data" placeholder="Data Value" step="0.01" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="color" class="highlight-text">Color:</label>
+              <input type="color" name="color[]" class="form-control color" required>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" onclick="addMore()" class="btn" title="Add More Field">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50">
+          <path fill="#00eaff"
+            d="M 25 2 C 12.309295 2 2 12.309295 2 25 C 2 37.690705 12.309295 48 25 48 C 37.690705 48 48 37.690705 48 25 C 48 12.309295 37.690705 2 25 2 z M 25 4 C 36.609824 4 46 13.390176 46 25 C 46 36.609824 36.609824 46 25 46 C 13.390176 46 4 36.609824 4 25 C 4 13.390176 13.390176 4 25 4 z M 24 13 L 24 24 L 13 24 L 13 26 L 24 26 L 24 37 L 26 37 L 26 26 L 37 26 L 37 24 L 26 24 L 26 13 L 24 13 z">
+          </path>
+        </svg>
+      </button>
+      <button type="submit" class="btn" title="Generate Chat">
+        <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#007bff" clip-rule="evenodd"
+            d="M15.0614 9.67972L16.4756 11.0939L17.8787 9.69083L16.4645 8.27662L15.0614 9.67972ZM16.4645 6.1553L20 9.69083L8.6863 21.0045L5.15076 17.469L16.4645 6.1553Z"
+            fill="#1F2328" />
+          <path fill="#007bff" clip-rule="evenodd"
+            d="M11.364 5.06066L9.59619 6.82843L8.53553 5.76777L10.3033 4L11.364 5.06066ZM6.76778 6.82842L5 5.06067L6.06066 4L7.82843 5.76776L6.76778 6.82842ZM10.3033 10.364L8.53553 8.5962L9.59619 7.53554L11.364 9.3033L10.3033 10.364ZM7.82843 8.5962L6.06066 10.364L5 9.3033L6.76777 7.53554L7.82843 8.5962Z"
+            fill="#1F2328" />
+        </svg>
+      </button>
+      <button onclick="downloadChart()" class="btn" id="download" style="display: none;"><svg width="50px" height="50px" viewBox="0 0 24 24" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17 17H17.01M17.4 14H18C18.9319 14 19.3978 14 19.7654 14.1522C20.2554 14.3552 20.6448 14.7446 20.8478 15.2346C21 15.6022 21 16.0681 21 17C21 17.9319 21 18.3978 20.8478 18.7654C20.6448 19.2554 20.2554 19.6448 19.7654 19.8478C19.3978 20 18.9319 20 18 20H6C5.06812 20 4.60218 20 4.23463 19.8478C3.74458 19.6448 3.35523 19.2554 3.15224 18.7654C3 18.3978 3 17.9319 3 17C3 16.0681 3 15.6022 3.15224 15.2346C3.35523 14.7446 3.74458 14.3552 4.23463 14.1522C4.60218 14 5.06812 14 6 14H6.6M12 15V4M12 15L9 12M12 15L15 12"
+            stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg></button>
+    </form>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    let chart;
+    let ctx;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      ctx = document.getElementById('myChart').getContext('2d');
+    });
+
+
+    function addMore() {
+      const inputFields = document.getElementById('inputFields');
+      const newField = `
+        <div class="row border-rounded border border-primary p-3 mb-3">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="label" class="highlight-text">Label:</label>
+              <input type="text" name="label[]" class="form-control label-name" placeholder="Label Name" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="data" class="highlight-text">Value:</label>
+              <input type="number" name="data[]" class="form-control data" placeholder="Data Value" step="0.01" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="color" class="highlight-text">Color:</label>
+              <input type="color" name="color[]" class="form-control color" required>
+            </div>
+          </div>
+          <div class="col-md-1 align-self-center">
+            <button type="button" class="btn text-danger btn-sm remove-field">
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 30 30">
+              <path fill="red" d="M 14.984375 2.4863281 A 1.0001 1.0001 0 0 0 14 3.5 L 14 4 L 8.5 4 A 1.0001 1.0001 0 0 0 7.4863281 5 L 6 5 A 1.0001 1.0001 0 1 0 6 7 L 24 7 A 1.0001 1.0001 0 1 0 24 5 L 22.513672 5 A 1.0001 1.0001 0 0 0 21.5 4 L 16 4 L 16 3.5 A 1.0001 1.0001 0 0 0 14.984375 2.4863281 z M 6 9 L 7.7929688 24.234375 C 7.9109687 25.241375 8.7633438 26 9.7773438 26 L 20.222656 26 C 21.236656 26 22.088031 25.241375 22.207031 24.234375 L 24 9 L 6 9 z"></path>
+          </svg></button>
+          </div>
+        </div>
+      `;
+      inputFields.insertAdjacentHTML('beforeend', newField);
+      const removeButtons = document.querySelectorAll('.remove-field');
+      removeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          button.closest('.row').remove();
+        });
+      });
+    }
+
+    const createPieChart = (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const labels = form.querySelectorAll('[name="label[]"]');
+      const data = form.querySelectorAll('[name="data[]"]');
+      const colors = form.querySelectorAll('[name="color[]"]');
+      const labelNames = [];
+      const dataValues = [];
+      const dataColors = [];
+      labels.forEach(label => {
+        labelNames.push(label.value);
+      });
+      data.forEach(d => {
+        dataValues.push(parseFloat(d.value));
+      });
+      colors.forEach(color => {
+        dataColors.push(color.value);
+      });
+
+      console.log(labelNames, dataValues, dataColors);
+
+      if (chart) {
+        chart.destroy();
+      }
+
+      chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labelNames,
+          datasets: [{
+            label: '# of Votes',
+            data: dataValues,
+            backgroundColor: dataColors,
+            borderWidth: 2,
+            hoverOffset: 4
+          }]
+        },
+        
+      });
+      document.getElementById("download").style.display = "";
+    };
+
+    const downloadChart = () => {
+      const canvas = document.getElementById('myChart');
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'chart.png';
+      link.href = url;
+      link.click();
+    };
+  </script>
+</body>
+
+</html>
